@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Eventos Arquivados</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: #0f111a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 30px;
+        }
+
+        h1 {
+            font-size: 2.2rem;
+            color: #42a5f5;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #b0bec5;
+            margin-bottom: 25px;
+        }
+
+        .msg-sucesso, .msg-erro {
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: bold;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+            text-align: center;
+        }
+
+        .msg-sucesso {
+            background-color: #1b5e20;
+            color: #a5d6a7;
+            border-left: 5px solid #66bb6a;
+        }
+
+        .msg-erro {
+            background-color: #b71c1c;
+            color: #ffcdd2;
+            border-left: 5px solid #ef5350;
+        }
+
+        a.voltar {
+            display: inline-block;
+            margin: 20px 0;
+            padding: 12px 20px;
+            background-color: #c62828;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+            transition: 0.3s;
+        }
+
+        a.voltar:hover {
+            background-color: #f44336;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #1f2230;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+        }
+
+        thead {
+            background-color: #273043;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+            color: #e0e0e0;
+        }
+
+        th {
+            font-size: 1.1rem;
+            color: #90caf9;
+        }
+
+        tr:nth-child(even) {
+            background-color: #262a3a;
+        }
+
+        tr:hover {
+            background-color: #32384d;
+        }
+
+        button.restaurar {
+            background-color: #2e7d32;
+            color: #fff;
+            padding: 8px 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        button.restaurar:hover {
+            background-color: #43a047;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.6);
+        }
+
+        .empty-row {
+            text-align: center;
+            padding: 20px;
+            color: #b0bec5;
+            background-color: #1f2230;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Eventos Arquivados</h1>
+<p>Estes eventos estão ocultos do painel principal, mas seus dados ainda existem para relatórios.</p>
+
+<div th:if="${sucesso}" class="msg-sucesso" th:text="${sucesso}"></div>
+<div th:if="${erro}" class="msg-erro" th:text="${erro}"></div>
+
+<a class="voltar" th:href="@{/admin/dashboard}">Voltar ao Painel Principal</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>Nome do Evento</th>
+        <th>Data</th>
+        <th>Restaurar</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="evento : ${eventos}">
+        <td th:text="${evento.nome}"></td>
+        <td th:text="${#temporals.format(evento.data, 'dd/MM/yyyy HH:mm')}"></td>
+
+        <td>
+            <form th:action="@{/admin/evento/desarquivar}" method="post">
+                <input type="hidden" name="id" th:value="${evento.idEvento}" />
+                <button class="restaurar" type="submit">Restaurar</button>
+            </form>
+        </td>
+    </tr>
+
+    <tr th:if="${#lists.isEmpty(eventos)}">
+        <td class="empty-row" colspan="3">Nenhum evento arquivado.</td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

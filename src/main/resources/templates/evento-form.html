@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Evento</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            background-color: #0f111a;
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        form {
+            background-color: #1f2230;
+            padding: 40px 60px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.6);
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s;
+            box-sizing: border-box;
+        }
+
+        form:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: #42a5f5;
+            margin-bottom: 25px;
+            text-align: center;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #e0e0e0;
+        }
+
+        input[type="text"], input[type="datetime-local"], input[type="number"] {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #555;
+            background-color: #272b3c;
+            color: #e0e0e0;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border: 1px solid #42a5f5;
+            box-shadow: 0 0 10px #42a5f5;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-start;
+        }
+
+        button {
+            flex: 1;
+            background: linear-gradient(145deg, #42a5f5, #1e88e5);
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        }
+
+        a.cancel {
+            flex: 1;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 12px;
+            background-color: #c62828;
+            color: #fff;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.6);
+            transition: all 0.3s;
+        }
+
+        a.cancel:hover {
+            background-color: #f44336;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.8);
+        }
+        input[type="number"] {
+            max-width: 150px;
+        }
+
+        @media (max-width: 500px) {
+            .buttons {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<form th:action="@{/admin/eventos/salvar}" th:object="${evento}" method="post">
+    <h2>Criar Novo Evento</h2>
+
+    <div>
+        <label for="nome">Nome do Evento:</label>
+        <input type="text" id="nome" th:field="*{nome}" required>
+    </div>
+
+    <div>
+        <label for="data">Data e Hora do Evento:</label>
+        <input type="datetime-local" id="data" th:field="*{data}" required>
+    </div>
+
+    <div>
+        <label for="pausas">Quantidade de Pausas:</label>
+        <input type="number" id="pausas" th:field="*{quantidadePausas}" min="0" value="0">
+    </div>
+
+    <div class="buttons">
+        <button type="submit">Salvar Evento</button>
+        <a class="cancel" th:href="@{/admin/dashboard}">Cancelar</a>
+    </div>
+</form>
+
+</body>
+</html>
