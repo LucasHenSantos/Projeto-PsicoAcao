@@ -24,6 +24,7 @@ public class CheckinController {
     @Autowired private AlunoRepository alunoRepository;
     @Autowired private CheckinPontoRepository pontoRepository;
     @Autowired private PresencaLogRepository presencaLogRepository;
+
     @GetMapping("/checkin/{uuid}")
     public String showFormularioCheckin(@PathVariable("uuid") String uuid, Model model) {
 
@@ -57,9 +58,12 @@ public class CheckinController {
             redirectAttributes.addFlashAttribute("matricula", matricula);
             return "redirect:/checkin/" + uuid;
         }
+
+        // 1. Lógica de busca/criação do Aluno (Seu código original)
         Aluno aluno;
         Optional<Aluno> alunoOpt = alunoRepository.findByMatricula(matricula);
 
+        // ... (Lógica de Aluno inalterada: busca ou cria)
         if (alunoOpt.isPresent()) {
             Aluno alunoExistente = alunoOpt.get();
             if (alunoExistente.getNomeCompleto().trim().equalsIgnoreCase(nome.trim())) {
@@ -86,16 +90,42 @@ public class CheckinController {
                 return "redirect:/checkin/" + uuid;
             }
         }
-        PresencaLog log = new PresencaLog();
-        log.setAluno(aluno);
-        log.setPonto(pontoOpt.get());
-        log.setTimestamp(LocalDateTime.now());
-        presencaLogRepository.save(log);
 
-        return "redirect:/checkin/sucesso";
+        // 2. Lógica de Check-in ou Check-out (NOVA LÓGICA)
+        CheckinPonto ponto = pontoOpt.get();
+        String tipoOperacao;
+
+        // Busca um log de presença que o aluno fez neste ponto e que AINDA NÃO TEM check-out
+        Optional<PresencaLog> logOpt = presencaLogRepository.findByAlunoAndPontoAndCheckOutTimestampIsNull(aluno, ponto);
+
+        if (logOpt.isPresent()) {
+            // Se encontrar um log, realiza o CHECK-OUT: atualiza o timestamp de saída
+            PresencaLog log = logOpt.get();
+            log.setCheckOutTimestamp(LocalDateTime.now()); // <--- Define a hora de saída
+            presencaLogRepository.save(log);
+            tipoOperacao = "checkout";
+
+        } else {
+            // Se não encontrar, realiza o CHECK-IN: cria um novo log
+            PresencaLog novoLog = new PresencaLog();
+            novoLog.setAluno(aluno);
+            novoLog.setPonto(ponto);
+            novoLog.setTimestamp(LocalDateTime.now()); // Este é o CheckInTimestamp
+            // novoLog.setCheckOutTimestamp(null); <--- Deixa o check-out nulo
+            presencaLogRepository.save(novoLog);
+            tipoOperacao = "checkin";
+        }
+
+        // 3. Redireciona para a tela de sucesso, passando o tipo de sucesso via URL
+        return "redirect:/checkin/sucesso?tipo=" + tipoOperacao; // <--- Redirecionamento Dinâmico
     }
+
     @GetMapping("/checkin/sucesso")
-    public String showSucesso() {
+    public String showSucesso(@RequestParam(name = "tipo", required = false, defaultValue = "checkin") String tipo, Model model) {
+
+        // Adiciona o parâmetro 'tipo' ao modelo para ser usado pelo Thymeleaf no HTML
+        model.addAttribute("tipoSucesso", tipo);
+
         return "checkin-sucesso";
     }
 }

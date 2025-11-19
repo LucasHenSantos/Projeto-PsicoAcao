@@ -1,6 +1,3 @@
-/* Conteúdo do styles.css (Extraído da sua tag <style>) */
-
-/* Reset e tipografia */
 * {
     margin: 0;
     padding: 0;
@@ -13,13 +10,11 @@ body {
     color: #e0e0e0;
 }
 
-/* Dashboard layout */
 .dashboard {
     display: flex;
     min-height: 100vh;
 }
 
-/* Sidebar */
 .sidebar {
     width: 250px;
     background-color: #2A4B7C;
@@ -62,7 +57,6 @@ body {
     transform: translateX(5px);
 }
 
-/* Logout */
 form.logout input[type="submit"] {
     width: 100%;
     padding: 12px;
@@ -81,7 +75,6 @@ form.logout input[type="submit"]:hover {
     transform: translateY(-2px);
 }
 
-/* Main content */
 .main-content {
     flex: 1;
     padding: 30px 50px;
@@ -103,7 +96,6 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Mensagens */
 .mensagem {
     padding: 15px 25px;
     border-radius: 12px;
@@ -115,7 +107,6 @@ h2 {
 .mensagem.sucesso { background-color: #2e7d32; color: #dcedc8; border-left: 5px solid #66bb6a }
 .mensagem.erro { background-color: #c62828; color: #ffebee; border-left: 5px solid #ef5350 }
 
-/* Cards */
 .cards {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -140,7 +131,6 @@ h2 {
     color: #42a5f5;
 }
 
-/* Form inputs */
 form label {
     display: block;
     margin-bottom: 5px;
@@ -166,7 +156,6 @@ form input[type="date"]:focus {
     box-shadow: 0 0 10px #42a5f5;
 }
 
-/* Botões */
 button {
     background: linear-gradient(145deg, #42a5f5, #1e88e5);
     color: #fff;
@@ -198,7 +187,6 @@ button.arquivar:hover {
     text-shadow: 0 0 8px rgba(255,0,0,0.7);
 }
 
-/* Tabela */
 table {
     width: 100%;
     border-collapse: separate;
@@ -221,7 +209,6 @@ table th {
 table tr:nth-child(even) { background-color: #1f2230; }
 table tr:hover { background-color: #323752; transform: scale(1.01); }
 
-/* Responsivo */
 @media (max-width: 900px) {
     .dashboard {
         flex-direction: column;

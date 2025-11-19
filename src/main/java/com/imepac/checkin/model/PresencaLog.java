@@ -22,6 +22,13 @@ public class PresencaLog {
     @Column(name = "timestamp", nullable = false)
     private LocalDateTime timestamp;
 
+    // 💡 NOVO CAMPO: Para registrar a hora da saída (Check-out).
+    // nullable = true pois o check-out é opcional/posterior.
+    @Column(name = "checkout_timestamp", nullable = true)
+    private LocalDateTime checkOutTimestamp;
+
+    // --- Getters e Setters ---
+
     public Integer getIdPresenca() {
         return idPresenca;
     }
@@ -52,5 +59,13 @@ public class PresencaLog {
 
     public void setTimestamp(LocalDateTime timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public LocalDateTime getCheckOutTimestamp() {
+        return checkOutTimestamp;
+    }
+
+    public void setCheckOutTimestamp(LocalDateTime checkOutTimestamp) {
+        this.checkOutTimestamp = checkOutTimestamp;
     }
 }

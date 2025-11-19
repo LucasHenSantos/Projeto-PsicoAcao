@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Sucesso!</title>
@@ -17,6 +17,7 @@
         }
 
         .mensagem-sucesso {
+            /* Mantive a cor verde para 'sucesso', mas você pode adicionar classes dinâmicas aqui se quiser cores diferentes */
             background-color: #2e7d32;
             color: #dcedc8;
             padding: 30px 40px;
@@ -70,8 +71,15 @@
 <body>
 
 <div class="mensagem-sucesso">
-    <h1>Check-in realizado com sucesso!</h1>
-    <p>Sua presença foi registrada.</p>
+
+    <h1 th:text="${tipoSucesso == 'checkout'} ? 'Check-out realizado com sucesso!' : 'Check-in realizado com sucesso!'">
+        Mensagem Padrão (será substituída pelo Thymeleaf)
+    </h1>
+
+    <p th:text="${tipoSucesso == 'checkout'} ? 'Seu registro de saída foi concluído. Obrigado.' : 'Sua presença foi registrada.'">
+        Sua presença foi registrada.
+    </p>
+
     <button onclick="window.location.href='/'">Voltar ao Dashboard</button>
 </div>
 
