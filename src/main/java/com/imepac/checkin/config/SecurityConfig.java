@@ -1,6 +1,5 @@
 package com.imepac.checkin.config;
 
-// IMPORTANTE: Mude esta importação
 import com.imepac.checkin.service.AppUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -9,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+// ❌ REMOVIDO: import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -17,7 +17,6 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    // IMPORTANTE: Mude esta injeção
     @Autowired
     private AppUserDetailsService appUserDetailsService;
 
@@ -26,12 +25,10 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests(authorize -> authorize
 
-                        .requestMatchers("/checkin/**", "/login", "/css/**","/img/**", "/js/**").permitAll()
 
+                        .requestMatchers("/checkin/**", "/login", "/css/**", "/js/**", "/img/**").permitAll()
                         .requestMatchers("/admin/professores/**").hasAuthority("ROLE_COORDENADOR")
-
                         .requestMatchers("/admin/**").hasAnyAuthority("ROLE_COORDENADOR", "ROLE_PROFESSOR")
-
                         .anyRequest().authenticated()
                 )
                 .formLogin(form -> form

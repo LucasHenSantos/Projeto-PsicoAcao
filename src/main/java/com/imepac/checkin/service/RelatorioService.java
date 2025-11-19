@@ -10,10 +10,11 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; // Importe
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime; // Necessário para a lógica de saída
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,10 +24,11 @@ public class RelatorioService {
 
     @Autowired
     private PresencaLogRepository presencaLogRepository;
+
     @Transactional(readOnly = true)
     public void gerarRelatorio(HttpServletResponse response, LocalDate dataInicio, LocalDate dataFim, String nomeEvento) throws IOException {
 
-        List<PresencaLog> todosOsLogs = presencaLogRepository.findAll();
+        List<PresencaLog> todosOsLogs = presencaLogRepository.findAllWithDetails();
 
         List<PresencaLog> logsFiltrados = todosOsLogs.stream()
                 .filter(log -> {
@@ -59,7 +61,7 @@ public class RelatorioService {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Relatório de Presença");
 
-        String[] headers = {"Nome Aluno", "Matrícula", "Nome Palestra", "Registro (Ponto)", "Data", "Hora"};
+        String[] headers = {"Nome Aluno", "Matrícula", "Nome Palestra", "Registro (Ponto)", "Data Entrada", "Hora Entrada", "Data Saída", "Hora Saída"};
         Row headerRow = sheet.createRow(0);
         for (int i = 0; i < headers.length; i++) {
             Cell cell = headerRow.createCell(i);
@@ -72,13 +74,22 @@ public class RelatorioService {
 
         for (PresencaLog log : logsFiltrados) {
             Row row = sheet.createRow(rowNum++);
+
+            LocalDateTime checkOutTime = log.getCheckOutTimestamp();
+            String dataSaida = checkOutTime != null ? checkOutTime.format(dateFormatter) : "";
+            String horaSaida = checkOutTime != null ? checkOutTime.format(timeFormatter) : "";
+
             row.createCell(0).setCellValue(log.getAluno().getNomeCompleto());
             row.createCell(1).setCellValue(log.getAluno().getMatricula());
             row.createCell(2).setCellValue(log.getPonto().getEvento().getNome());
             row.createCell(3).setCellValue(log.getPonto().getNome());
             row.createCell(4).setCellValue(log.getTimestamp().format(dateFormatter));
             row.createCell(5).setCellValue(log.getTimestamp().format(timeFormatter));
+
+            row.createCell(6).setCellValue(dataSaida); // Data Saída
+            row.createCell(7).setCellValue(horaSaida); // Hora Saída
         }
+
         response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
         response.setHeader("Content-Disposition", "attachment; filename=\"relatorio_presenca.xlsx\"");
         workbook.write(response.getOutputStream());

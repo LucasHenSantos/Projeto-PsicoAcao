@@ -17,7 +17,7 @@
         }
 
         .mensagem-sucesso {
-            /* Mantive a cor verde para 'sucesso', mas você pode adicionar classes dinâmicas aqui se quiser cores diferentes */
+            /* Mantive a cor verde para 'sucesso' */
             background-color: #2e7d32;
             color: #dcedc8;
             padding: 30px 40px;
@@ -72,11 +72,11 @@
 
 <div class="mensagem-sucesso">
 
-    <h1 th:text="${tipoSucesso == 'checkout'} ? 'Check-out realizado com sucesso!' : 'Check-in realizado com sucesso!'">
+    <h1 th:text="${tipoSucesso.equals('checkout')} ? 'Check-out realizado com sucesso!' : 'Check-in realizado com sucesso!'">
         Mensagem Padrão (será substituída pelo Thymeleaf)
     </h1>
 
-    <p th:text="${tipoSucesso == 'checkout'} ? 'Seu registro de saída foi concluído. Obrigado.' : 'Sua presença foi registrada.'">
+    <p th:text="${tipoSucesso.equals('checkout')} ? 'Seu registro de saída foi concluído. Obrigado.' : 'Sua presença foi registrada.'">
         Sua presença foi registrada.
     </p>
 

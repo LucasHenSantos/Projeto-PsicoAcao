@@ -13,6 +13,7 @@ com\imepac\checkin\repository\PresencaLogRepository.class
 com\imepac\checkin\repository\EventoRepository.class
 com\imepac\checkin\repository\ProfessorRepository.class
 com\imepac\checkin\model\PresencaEventoId.class
+com\imepac\checkin\service\CheckinService.class
 com\imepac\checkin\model\Professor.class
 com\imepac\checkin\repository\AlunoRepository.class
 com\imepac\checkin\repository\CoordenadorRepository.class
