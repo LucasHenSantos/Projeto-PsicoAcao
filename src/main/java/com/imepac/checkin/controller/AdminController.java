@@ -101,7 +101,7 @@ public class AdminController {
         if (ponto == null) {
             return "redirect:/admin/dashboard";
         }
-        String checkinUrl = "http://193.203.182.92:8080/checkin/" + uuid;
+        String checkinUrl = "http://psicoacao.adsimepac.com.br/checkin/" + uuid;
         String qrCodeBase64 = qrCodeService.generateQRCodeBase64(checkinUrl, 300, 300);
         model.addAttribute("ponto", ponto);
         model.addAttribute("qrCodeBase64", qrCodeBase64);
